@@ -5,7 +5,7 @@ import sys
 from .config_ import Config
 from .logger_ import Logger
 
-__all__ = ['config', 'logger']
+__all__ = ['Config', 'Logger', 'config', 'logger']
 
 
 def _get_main_module_name():

@@ -28,7 +28,8 @@ def patch_config_with_params(config_path):
     if file_path.exists():
         file_path.unlink()
 
-    config = Config(config_path=str(file_path), create=True, logger=logger)
+    config = Config(config_path=file_path, logger=logger)
+    config.write_config(config_path=file_path)
     yield
     if file_path.exists():
         file_path.unlink()
@@ -39,7 +40,12 @@ class TestConfig:
         assert config['debug'] is not None
 
     def test_load_config(self, config_path):
-        config.load_config(str(config_path))
+        config.load_config(config_path)
+        assert config['debug'] is not None
+
+    def test_default_config_path(self):
+        config_with_default_path = Config()
+        assert config_with_default_path._config_path == config_with_default_path.get_path(config.CONFIG_DEFAULT_FILE)
 
     def test_load_env(self):
         os.environ['DEBUG'] = 'True'
@@ -70,6 +76,12 @@ class TestConfig:
 
     def test_write_config(self, config_path):
         config.NEW = 'new2 value2'
-        config._write_config(config._config, str(config_path))
-        config2 = Config(config_path=str(config_path))
+        config.write_config(config_path)
+        config2 = Config(config_path=config_path)
         assert config.NEW == config2['NEW']
+
+        config3 = Config()
+        config3.NEW = 'new3 value3'
+        config3.write_config(config_path)
+        config4 = Config(config_path=config_path)
+        assert config3.NEW == config4.NEW

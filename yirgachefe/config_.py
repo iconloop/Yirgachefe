@@ -3,6 +3,7 @@ import json
 import logging
 import os
 from pathlib import Path
+from typing import Optional
 
 from yirgachefe.logger_ import Logger
 
@@ -10,38 +11,28 @@ from yirgachefe.logger_ import Logger
 class Config:
     CONFIG_DEFAULT_FILE = 'configure.json'
 
-    def __init__(self, config_path: str = '', create: bool = False, logger=None):
+    def __init__(self, config_path: Optional[Path] = None, logger=None):
         super().__init__()
-        _config_path = config_path or str(self.get_path(self.CONFIG_DEFAULT_FILE))
+        self._current_path: Optional[Path] = None
+        self._config_path = config_path or self.get_path(self.CONFIG_DEFAULT_FILE)
         self._config = {}
         self._logger: Logger = logger or logging.getLogger(__name__)
         self._log_options = None
-        self._load_config_file(_config_path, check_exist=False)
+        self._load_config_file(self._config_path, check_exist=False)
         self._set_common_default()
-
-        if create:
-            self._write_config(self._config, _config_path)
-
-        if 'config_path' in self._config:
-            self._load_config_file(str(self._config['config_path']), check_exist=False)
-
         self._load_config_env()
         self._update_log_options()
 
-    def load_config(self, config_path: str):
+    def load_config(self, config_path: Path):
         """Load User configuration file.
-
-        However, os 'env' variables always have higher priority than config files.
-        If the 'env' variable is set, the value of the config file is not applied.
 
         :param config_path: The str path created with pathlib.Path is recommended.
         """
         self._load_config_file(config_path=config_path)
-        self._load_config_env()
         self._update_log_options()
 
     def __setattr__(self, key, value):
-        if key in ['_config', '_logger', '_log_options']:
+        if key in ['_current_path', '_config_path', '_config', '_logger', '_log_options']:
             self.__dict__[key] = value
         else:
             self._config[key] = value
@@ -69,15 +60,14 @@ class Config:
             self._logger.debug("config['log_format'] is not in configured. So default is used.")
             self._config['log_format'] = \
                 "%(asctime)s,%(msecs)03d %(process)d %(thread)d %(levelname)s %(filename)s(%(lineno)d) %(message)s"
-        if 'encoding' not in self._config:
-            self._config['encoding'] = "utf-8"
 
-    def _load_config_file(self, config_path: str, check_exist=True):
-        if not check_exist and not Path(config_path).is_file():
+    def _load_config_file(self, config_path: Path, check_exist=True):
+        if not check_exist and not config_path.is_file():
             return
 
         with open(config_path, 'r') as config_file:
             self._config.update(json.load(config_file))
+            self._current_path = config_path.parent
 
     def _load_config_env(self):
         for config_name in self._config:
@@ -102,16 +92,22 @@ class Config:
                 stream_out=self._config.get('debug'),
                 coloredlog=self._config.get('debug'))
 
-    def _write_config(self, config: dict, config_path: str):
-        with open(config_path, 'w', encoding=self._config['encoding']) as config_file:
-            json.dump(config, config_file, indent=4, sort_keys=True)
+    def write_config(self, config_path: Optional[Path] = None, encoding: str = 'utf-8'):
+        """You can set config values in code, and save it as a file.
 
-    @staticmethod
-    def get_path(path: str) -> Path:
-        """Get Path from current working directory.
+        :param config_path: Path or CONFIG_DEFAULT_FILE.
+        :param encoding: file encoding.
+        :return:
+        """
+        write_path = config_path or self._config_path
+        with open(write_path, 'w', encoding=encoding) as config_file:
+            json.dump(self._config, config_file, indent=4, sort_keys=True)
+
+    def get_path(self, path: str) -> Path:
+        """Get Path from the directory where the configure.json file is.
 
         :param path: file_name or path
         :return:
         """
-        root_path = Path(os.path.join(os.getcwd()))
+        root_path = self._current_path or Path(os.path.join(os.getcwd()))
         return root_path.joinpath(path)

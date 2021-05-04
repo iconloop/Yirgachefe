@@ -36,11 +36,20 @@ config.NEW2 = 'new value2'
 {
   "debug": false,
   "log_level": "WARNING",
-  "log_format": "%(asctime)s,%(msecs)03d %(process)d %(thread)d %(levelname)s %(filename)s(%(lineno)d) %(message)s",
-  "encoding": "utf-8"
+  "log_format": "%(asctime)s,%(msecs)03d %(process)d %(thread)d %(levelname)s %(filename)s(%(lineno)d) %(message)s"
 }
 ```
 * debug: Set stream handler to logging with coloredlog.
 * log_level: Log level for logging.
 * log_format: Log format for logging.
-* encoding: The encoding value used when saving the configuration file with Yirgachefe.
+
+### Make and Save configure.json
+* After creating an empty config class, you can set the config value and save it as a file.
+
+```python
+from yirgachefe import Config
+
+config = Config()
+config.NEW = 'new value'
+config.write_config()
+```
