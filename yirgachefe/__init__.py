@@ -9,7 +9,13 @@ __all__ = ['Config', 'Logger', 'config', 'logger']
 
 
 def _get_main_module_name():
-    return str(Path(sys.modules['__main__'].__file__).stem)
+    _name = ''
+    try:
+        _name = sys.modules['__main__'].__file__
+    except AttributeError:
+        _name = sys.argv[0]
+
+    return str(Path(_name).stem)
 
 
 logger = Logger(name=_get_main_module_name())

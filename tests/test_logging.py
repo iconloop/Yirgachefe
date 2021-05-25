@@ -64,3 +64,7 @@ class TestLogger:
             logs = _log_file.readlines()
             for log in logs:
                 assert 'NO-FILE' not in log
+
+    def test_default_logger_name(self):
+        from yirgachefe import _get_main_module_name
+        assert logger.name == _get_main_module_name()
