@@ -12,7 +12,7 @@ with open('requirements.txt', 'r') as f:
     ]
 
 setup_options = {
-    "name": "Yirgachefe",
+    "name": "yirgachefe",
     "version": "0.1.0",
     "description": "Convenience of configuration and logging.",
     "package_data": {"yirgachefe": ["logger_.pyi"]},
