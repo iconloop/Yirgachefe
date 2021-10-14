@@ -1,5 +1,7 @@
 """Test Logger"""
+import glob
 import os
+import time
 from pathlib import Path
 
 import pytest
@@ -17,11 +19,21 @@ def log_file() -> Path:
 @pytest.fixture(autouse=True)
 def clear_test_log_file(log_file):
     file_path: Path = log_file
-    if file_path.exists():
-        file_path.unlink()
+    root_path = Path(os.path.join(file_path, '.'))
+
+    file_list = glob.glob(f'{file_path}*')
+    for file in file_list:
+        path: Path = root_path.joinpath(file)
+        if path.exists():
+            path.unlink()
+
     yield
-    if file_path.exists():
-        file_path.unlink()
+
+    file_list = glob.glob(f'{file_path}*')
+    for file in file_list:
+        path: Path = root_path.joinpath(file)
+        if path.exists():
+            path.unlink()
 
 
 class TestLogger:
@@ -64,6 +76,22 @@ class TestLogger:
             logs = _log_file.readlines()
             for log in logs:
                 assert 'NO-FILE' not in log
+
+    def test_log_rotating(self, log_file):
+        print()
+        logger.update_logger(log_path=str(log_file), stream_out=True, coloredlog=True,
+                             log_when='s', log_interval=1, log_backup_count=5)
+        for i in range(3):
+            logger.debug('rotating file')
+            time.sleep(1)
+
+        file_path: Path = log_file
+        root_path = Path(os.path.join(file_path, '.'))
+        file_list = glob.glob(f'{file_path}*')
+        for file in file_list:
+            path: Path = root_path.joinpath(file)
+            print(file)
+            assert path.exists()
 
     def test_default_logger_name(self):
         from yirgachefe import _get_main_module_name
