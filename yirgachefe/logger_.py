@@ -1,6 +1,7 @@
 """Logger"""
 import logging
 from typing import Optional
+from logging.handlers import TimedRotatingFileHandler
 
 import coloredlogs
 
@@ -40,7 +41,8 @@ class LoggerBase:
                       log_format=None,
                       log_path=None,
                       stream_out: bool = False,
-                      coloredlog: bool = False):
+                      coloredlog: bool = False,
+                      **optionals):
         _log_level = log_level or logging.DEBUG
         _log_format = log_format or self._default_format
         self._logger.setLevel(_log_level)
@@ -64,6 +66,20 @@ class LoggerBase:
 
         if log_path:
             file_handler = logging.FileHandler(filename=log_path)
+
+            if optionals:
+                log_when = optionals.get('log_when')
+                log_interval = optionals.get('log_interval')
+                log_backup_count = optionals.get('log_backup_count')
+
+                if None not in [log_when, log_interval, log_backup_count]:
+                    file_handler = TimedRotatingFileHandler(
+                        filename=log_path,
+                        when=log_when,
+                        interval=log_interval,
+                        backupCount=log_backup_count
+                    )
+
             file_handler.setLevel(_log_level)
             file_handler.setFormatter(formatter)
             self._logger.addHandler(file_handler)

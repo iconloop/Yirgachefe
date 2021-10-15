@@ -90,7 +90,11 @@ class Config:
                 log_format=self._config.get('log_format'),
                 log_path=self._config.get('log_path'),
                 stream_out=self._config.get('debug'),
-                coloredlog=self._config.get('debug'))
+                coloredlog=self._config.get('debug'),
+                log_when=self._config.get('log_when'),
+                log_interval=self._config.get('log_interval'),
+                log_backup_count=self._config.get('log_backup_count')
+            )
 
     def write_config(self, config_path: Optional[Path] = None, encoding: str = 'utf-8'):
         """You can set config values in code, and save it as a file.

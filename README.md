@@ -36,12 +36,29 @@ config.NEW2 = 'new value2'
 {
   "debug": false,
   "log_level": "WARNING",
-  "log_format": "%(asctime)s,%(msecs)03d %(process)d %(thread)d %(levelname)s %(filename)s(%(lineno)d) %(message)s"
+  "log_format": "%(asctime)s,%(msecs)03d %(process)d %(thread)d %(levelname)s %(filename)s(%(lineno)d) %(message)s",
+  "log_path": "project-sample.log"
 }
 ```
 * debug: Set stream handler to logging with coloredlog.
 * log_level: Log level for logging.
 * log_format: Log format for logging.
+* log_path: Write a file log if present (optional)
+
+### Optional configuration for RotatingFileHandler.
+* yirgachefe supports time-based log file rotating.
+* Each option is as follows.
+* Rotating works when all values are present.
+```json
+{
+  "log_when": "d",
+  "log_interval": 1,
+  "log_backup_count": 10
+}
+```
+* log_when: rotating unit s | m | h | d | w0-w6 (see. 'logging.handler')
+* log_interval: rotating period
+* log_backup_count: log backup count.
 
 ### Make and Save configure.json
 * After creating an empty config class, you can set the config value and save it as a file.

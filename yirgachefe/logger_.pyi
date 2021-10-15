@@ -10,7 +10,8 @@ class Logger:
                       log_format=None,
                       log_path=None,
                       stream_out: bool=False,
-                      coloredlog: bool=False):
+                      coloredlog: bool=False,
+                      **optionals):
         pass
 
     def debug(self, msg, *args, **kwargs):
