@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from setuptools import setup, find_packages
 
 req_tests = ["pytest"]
@@ -11,13 +13,21 @@ with open('requirements.txt', 'r') as f:
         ] if s != ''
     ]
 
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
+
 setup_options = {
     "name": "yirgachefe",
-    "version": "0.1.0",
+    "version": "0.1.2",
+    "url": "https://github.com/iconloop/Yirgachefe",
+    "author": "ICONLOOP",
+    "author_email": "t_core@iconloop.com",
     "description": "Convenience of configuration and logging.",
+    "long_description": long_description,
+    "long_description_content_type": "text/markdown",
     "package_data": {"yirgachefe": ["logger_.pyi"]},
     "packages": find_packages(),
-    "python_requires": ">=3.7.3",
+    "python_requires": ">=3.9.7",
     "install_requires": install_requires,
     "extras_require": {
         "tests": req_tests,
