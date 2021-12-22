@@ -2,7 +2,7 @@
 A library for the convenience of configuring environment variables, configuration files, and logger.
 
 ## Prerequisite
-- Python 3.9.x
+- Python 3.7.5
 
 ## Quick start
 The configuration file format is JSON, and the default location is [CWD]/configure.json.

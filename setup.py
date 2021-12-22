@@ -18,7 +18,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup_options = {
     "name": "yirgachefe",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "url": "https://github.com/iconloop/Yirgachefe",
     "author": "ICONLOOP",
     "author_email": "t_core@iconloop.com",
@@ -27,7 +27,7 @@ setup_options = {
     "long_description_content_type": "text/markdown",
     "package_data": {"yirgachefe": ["logger_.pyi"]},
     "packages": find_packages(),
-    "python_requires": ">=3.9.7",
+    "python_requires": ">=3.7.5",
     "install_requires": install_requires,
     "extras_require": {
         "tests": req_tests,
