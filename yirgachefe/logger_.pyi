@@ -1,4 +1,5 @@
 """Logger interface"""
+from typing import Optional
 
 
 class Logger:
@@ -9,7 +10,7 @@ class Logger:
                       log_level: int=None,
                       log_format=None,
                       log_path=None,
-                      stream_out: bool=False,
+                      stream_out: Optional[bool]=None,
                       coloredlog: bool=False,
                       **optionals):
         pass

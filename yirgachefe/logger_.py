@@ -40,17 +40,18 @@ class LoggerBase:
                       log_level: Optional[int] = None,
                       log_format=None,
                       log_path=None,
-                      stream_out: bool = False,
+                      stream_out: Optional[bool] = None,
                       coloredlog: bool = False,
                       **optionals):
         _log_level = log_level or logging.DEBUG
         _log_format = log_format or self._default_format
+        _stream_out = True if log_path is None and stream_out is None else stream_out
         self._logger.setLevel(_log_level)
         formatter = logging.Formatter(_log_format)
 
         self._reset_handlers()
 
-        if stream_out:
+        if _stream_out:
             console = logging.StreamHandler()
             console.setLevel(_log_level)
             console.setFormatter(formatter)
