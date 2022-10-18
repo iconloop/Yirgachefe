@@ -20,5 +20,3 @@ def _get_main_module_name():
 
 logger = Logger(name=_get_main_module_name())
 config = Config(logger=logger)
-
-logger.update_logger()
