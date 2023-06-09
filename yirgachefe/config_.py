@@ -51,15 +51,24 @@ class Config:
 
     def _set_common_default(self):
         if 'debug' not in self._config:
-            self._logger.debug("config['debug'] is not configured. So default(False) is used.")
-            self._config['debug'] = False
+            self._logger.debug("config['debug'] is not configured. So default(True) is used.")
+            self._config['debug'] = True
         if 'log_level' not in self._config:
-            self._logger.debug("config['log_level'] is not configured. So default(logging.WARNING) is used.")
-            self._config['log_level'] = logging.getLevelName(logging.WARNING)
+            self._logger.debug("config['log_level'] is not configured. So default(logging.DEBUG) is used.")
+            self._config['log_level'] = logging.getLevelName(logging.DEBUG)
         if 'log_format' not in self._config:
             self._logger.debug("config['log_format'] is not in configured. So default is used.")
             self._config['log_format'] = \
                 "%(asctime)s,%(msecs)03d %(process)d %(thread)d %(levelname)s %(filename)s(%(lineno)d) %(message)s"
+        if 'log_when' not in self._config:
+            self._logger.debug("config['log_when'] is not in configured. So default(d) is used.")
+            self._config['log_when'] = "d"
+        if 'log_interval' not in self._config:
+            self._logger.debug("config['log_interval'] is not in configured. So default(1) is used.")
+            self._config['log_interval'] = 1
+        if 'log_backup_count' not in self._config:
+            self._logger.debug("config['log_backup_count'] is not in configured. So default(5) is used.")
+            self._config['log_backup_count'] = 5
 
     def _load_config_file(self, config_path: Path, check_exist=True):
         if not check_exist and not config_path.is_file():

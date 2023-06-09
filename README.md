@@ -2,7 +2,7 @@
 A library for the convenience of configuring environment variables, configuration files, and logger.
 
 ## Prerequisite
-- Python 3.7.9
+- Python 3.9.x or higher
 
 ## Quick start
 The configuration file format is JSON, and the default location is [CWD]/configure.json.
@@ -34,10 +34,13 @@ config.NEW2 = 'new value2'
 * You can use the changed value by explicitly setting it in the file.
 ```json
 {
-  "debug": false,
-  "log_level": "WARNING",
+  "debug": true,
+  "log_level": "DEBUG",
   "log_format": "%(asctime)s,%(msecs)03d %(process)d %(thread)d %(levelname)s %(filename)s(%(lineno)d) %(message)s",
-  "log_path": "project-sample.log"
+  "log_path": "Yirgachefe.log",
+  "log_when": "d",
+  "log_interval": 1,
+  "log_backup_count": 5
 }
 ```
 * debug: Set stream handler to logging with coloredlog.

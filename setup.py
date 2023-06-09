@@ -18,7 +18,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup_options = {
     "name": "yirgachefe",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "url": "https://github.com/iconloop/Yirgachefe",
     "author": "ICONLOOP",
     "author_email": "t_core@iconloop.com",
